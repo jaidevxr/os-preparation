@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DBMS Preparation Tracker</title>
+  <title>OS Preparation Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     ::-webkit-scrollbar {
@@ -102,7 +102,7 @@
   <div class="blob"></div>
 
   <header class="flex items-center justify-between px-6 py-4 border-b border-gray-700 sticky top-0 bg-gray-900 z-50">
-    <h1 class="text-2xl font-semibold tracking-wide select-none">DBMS PREPARATION</h1>
+    <h1 class="text-2xl font-semibold tracking-wide select-none">OS PREPARATION</h1>
     <div class="flex items-center space-x-4">
       <br></br>
       <button id="btnAddModule" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition text-white">Add Module/Imp Topics</button>
@@ -196,11 +196,12 @@
   }
 
   // Initial modules data (try to load from localStorage first)
-  let modules = JSON.parse(localStorage.getItem("dbmsModules")) || [
+  let modules = JSON.parse(localStorage.getItem("osModules")) || [
     {
       name: "Introduction to Operating System and Process Concept",
       topics: [
-        "Operating system and functions", "Classification of Operating systems", "Operating System Structure", "Operating System Services", "System call and System program", "Process concept", "Process state", "Process control block", "Context switching", "Operation on process", "Threads and their management", "Benefits of multithreading", "Types of threads", "Threading issues", "CPU-scheduling", "Scheduling criteria", "Scheduling Algorithms", "Concurrent Processes", "Inter Process Communication models and Schemes"
+        "Operating system and functions",
+        "Classification of Operating systems", "Operating System Structure", "Operating System Services", "System call and System program", "Process concept", "Process state", "Process control block", "Context switching", "Operation on process", "Threads and their management", "Benefits of multithreading", "Types of threads", "Threading issues", "CPU-scheduling", "Scheduling criteria", "Scheduling Algorithms", "Concurrent Processes", "Inter Process Communication models and Schemes"
       ],
     },
     {
@@ -225,24 +226,24 @@
 
   // Save modules to localStorage helper
   function saveModules() {
-    localStorage.setItem("dbmsModules", JSON.stringify(modules));
+    localStorage.setItem("osModules", JSON.stringify(modules));
   }
 
   // Calculate overall progress %
   function updateProgress() {
-    let totalTopics = 0;
-    let completedTopics = 0;
-    modules.forEach(m => {
-      totalTopics += m.topics.length;
-      if(m.progress) {
-        completedTopics += Object.values(m.progress).filter(v => v === true).length;
-      }
-    });
-    const percent = totalTopics ? (completedTopics / totalTopics) * 100 : 0;
-    document.getElementById("progressPercent").textContent = `${percent.toFixed(2)}%`;
-    document.getElementById("progressBar").style.width = percent + "%";
-    t
-  }
+  let totalTopics = 0;
+  let completedTopics = 0;
+  modules.forEach(m => {
+    totalTopics += m.topics.length;
+    if(m.progress) {
+      completedTopics += Object.values(m.progress).filter(v => v === true).length;
+    }
+  });
+  const percent = totalTopics ? (completedTopics / totalTopics) * 100 : 0;
+  document.getElementById("progressPercent").textContent = `${percent.toFixed(2)}%`;
+  document.getElementById("progressBar").style.width = percent + "%";
+}
+
 
   // Render modules & topics
   function render() {
@@ -319,7 +320,7 @@
 
   // Remaining time calculation
   function updateRemainingTime() {
-    const deadline = new Date("2025-06-04T13:59:59");
+    const deadline = new Date("2025-06-06T13:59:59");
     const now = new Date();
     let diff = deadline - now;
 
