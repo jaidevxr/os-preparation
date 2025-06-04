@@ -107,6 +107,8 @@
       <br></br>
       <button id="btnAddModule" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition text-white">Add Module/Imp Topics</button>
       <button id="btnNotes" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition">Notes</button>
+      <button id="btnPyq" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition">PYQ</button>
+
       <label for="darkToggle" class="flex items-center cursor-pointer select-none">
         <div class="relative">
           <input type="checkbox" id="darkToggle" class="sr-only" checked />
@@ -176,6 +178,15 @@
     </header>
     <embed id="pdfEmbed" src="os.pdf" type="application/pdf" class="flex-grow w-full" style="height: calc(100vh - 64px);" />
   </div>
+  <!-- PYQ Modal -->
+<div id="modalPyq" class="fixed inset-0 bg-black bg-opacity-90 hidden flex flex-col z-50">
+  <header class="flex header items-center justify-between px-6 py-4 border-b border-gray-700 sticky top-0 bg-gray-900 z-50">
+    <h2 class="text-xl font-semibold text-white">Previous Year Questions</h2>
+    <button id="closePyq" class="text-gray-300 hover:text-white text-3xl font-bold leading-none">&times;</button>
+  </header>
+  <embed id="pyqEmbed" src="pyq.pdf" type="application/pdf" class="flex-grow w-full" style="height: calc(100vh - 64px);" />
+</div>
+
 
 <script>
   // Dark mode toggle
@@ -445,6 +456,16 @@
   document.getElementById("closeNotes").addEventListener("click", () => {
     modalNotes.classList.add("hidden");
   });
+  // PYQ modal open/close
+const modalPyq = document.getElementById("modalPyq");
+
+document.getElementById("btnPyq").addEventListener("click", () => {
+  modalPyq.classList.remove("hidden");
+});
+document.getElementById("closePyq").addEventListener("click", () => {
+  modalPyq.classList.add("hidden");
+});
+
 
   // Update time every second
   setInterval(() => {
