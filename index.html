@@ -342,6 +342,41 @@
     editModuleTopics.value = module.topics.join(", ");
     modalEdit.classList.remove("hidden");
   }
+  saveEditBtn.addEventListener("click", () => {
+  const name = editModuleName.value.trim();
+  const topicsRaw = editModuleTopics.value.trim();
+  if (!name || !topicsRaw) {
+    alert("Module name and topics cannot be empty!");
+    return;
+  }
+
+  const newTopics = topicsRaw.split(",").map(t => t.trim()).filter(t => t);
+
+  const oldModule = modules[currentEditIndex];
+  const newProgress = {};
+
+  // Preserve progress for topics with the same text
+  if (oldModule.progress) {
+    newTopics.forEach((topic, newIndex) => {
+      const oldIndex = oldModule.topics.findIndex(t => t === topic);
+      if (oldIndex !== -1 && oldModule.progress[oldIndex]) {
+        newProgress[newIndex] = true;
+      }
+    });
+  }
+
+  modules[currentEditIndex] = {
+    name,
+    topics: newTopics,
+    progress: newProgress
+  };
+
+  saveModules();
+  render();
+  closeEditModal();
+});
+
+
 
   // Save edit changes
   saveAddBtn.addEventListener("click", () => {
