@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,78 +43,55 @@
       color: #a1a1aa; /* lighter gray for completed */
     }
     @media (max-width: 480px) {
-    .blob {
-      width: 200px;
-      height: 200px;
-      filter: blur(90px);
-    }
-
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-
-    .modal {
-      width: 90%;
-      padding: 1rem;
-    }
-
-    .topic-label {
-      display: block;
-      margin-left: 0.5rem;
-      word-break: break-word;
-    }
-
-    .title {
-      font-size: 1.25rem; /* text-xl */
-    }
-
-    .embed-container {
-      height: 60vh;
-    }
+  .blob {
+    width: 200px;
+    height: 200px;
+    filter: blur(90px);
   }
 
-  /* Tablets (up to 768px) */
-  @media (max-width: 768px) {
-    .blob {
-      width: 300px;
-      height: 300px;
-      filter: blur(120px);
-    }
-
-    .modal {
-      width: 80%;
-    }
-
-    .title {
-      font-size: 1.5rem; /* text-2xl */
-    }
-
-    .embed-container {
-      height: 75vh;
-    }
+  header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
+
+  header h1 {
+    font-size: 0.875rem;
+    flex: 1 0 100%;
+  }
+
+  header .flex {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.25rem;
+  }
+
+  header button {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  header label {
+    transform: scale(0.8);
+  }
+
+  .modal {
+    width: 90%;
+    padding: 1rem;
+  }
+}
+
   </style>
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
   <div class="blob"></div>
 
-  <header class="flex items-center justify-between px-6 py-4 border-b border-gray-700 sticky top-0 bg-gray-900 z-50">
+  <header class="flex header items-center justify-between px-6 py-4 border-b border-gray-700 bg-gray-900 z-50 relative">
+
     <h1 class="text-2xl font-semibold tracking-wide select-none">OS PREPARATION</h1>
     <div class="flex items-center space-x-4">
-      <br></br>
-      <button id="btnAddModule" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition text-white">Add Module/Imp Topics</button>
+      <button id="btnAddModule" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition text-white">Add Topics</button>
       <button id="btnNotes" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition">Notes</button>
       <button id="btnPyq" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-md transition">PYQ</button>
-
-      <label for="darkToggle" class="flex items-center cursor-pointer select-none">
-        <div class="relative">
-          <input type="checkbox" id="darkToggle" class="sr-only" checked />
-          <div class="w-11 h-6 bg-gray-600 rounded-full shadow-inner"></div>
-          <div class="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition"></div>
-        </div>
-      </label>
     </div>
   </header>
 
@@ -164,7 +140,7 @@
       <textarea id="addModuleTopics" rows="5" class="w-full rounded px-3 py-2 mb-4 text-gray-900"></textarea>
       <div class="flex justify-end items-center">
         <button id="cancelAddBtn" class="mr-3 px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancel</button>
-        <button id="saveAddBtn" class="bg-green-600 hover:bg-green-700 text-white rounded px-4 py-2">Add Module/Imp Topics</button>
+        <button id="saveAddBtn" class="bg-green-600 hover:bg-green-700 text-white rounded px-4 py-2">Add Topics</button>
       </div>
     </div>
   </div>
@@ -189,23 +165,6 @@
 
 
 <script>
-  // Dark mode toggle
-  const darkToggle = document.getElementById('darkToggle');
-  darkToggle.addEventListener('change', () => {
-    if (darkToggle.checked) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('prefersDark', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('prefersDark', 'false');
-    }
-  });
-
-  if (localStorage.getItem('prefersDark') === 'false') {
-    document.documentElement.classList.remove('dark');
-    darkToggle.checked = false;
-  }
-
   // Initial modules data (try to load from localStorage first)
   let modules = JSON.parse(localStorage.getItem("osModules")) || [
     {
@@ -385,20 +344,21 @@
   }
 
   // Save edit changes
-  saveEditBtn.addEventListener("click", () => {
-    const name = editModuleName.value.trim();
-    const topicsRaw = editModuleTopics.value.trim();
-    if (!name || !topicsRaw) {
-      alert("Module name and topics cannot be empty!");
-      return;
-    }
-    modules[currentEditIndex].name = name;
-    modules[currentEditIndex].topics = topicsRaw.split(",").map(t => t.trim()).filter(t => t);
-    modules[currentEditIndex].progress = {}; // reset progress on edit
-    saveModules();
-    render();
-    closeEditModal();
-  });
+  saveAddBtn.addEventListener("click", () => {
+  const name = addModuleName.value.trim();
+  const topicsRaw = addModuleTopics.value.trim();
+  if (!name || !topicsRaw) {
+    alert("Module name and topics cannot be empty!");
+    return;
+  }
+  const topics = topicsRaw.split(",").map(t => t.trim()).filter(t => t);
+  modules.push({ name, topics });
+  saveModules();
+  render();
+  modalAdd.classList.add("hidden"); // ✅ close modal after add
+});
+
+
 
   cancelEditBtn.addEventListener("click", closeEditModal);
 
@@ -428,22 +388,9 @@
     modalAdd.classList.add("hidden");
   });
 
-  saveAddBtn.addEventListener("click", () => {
-    const name = addModuleName.value.trim();
-    const topicsRaw = addModuleTopics.value.trim();
-    if (!name || !topicsRaw) {
-      alert("Module name and topics cannot be empty!");
-      return;
-    }
-    modules.push({
-      name,
-      topics: topicsRaw.split(",").map(t => t.trim()).filter(t => t),
-      progress: {},
-    });
-    saveModules();
-    render();
-    modalAdd.classList.add("hidden");
-  });
+  
+
+
   const cursor = document.querySelector('.blob');
     document.addEventListener('mousemove', function(e){
       cursor.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
